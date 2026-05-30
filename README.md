@@ -9,8 +9,8 @@ Studio, open an `x86 Native Tools Command Prompt for VS` and build with CMake:
 
 ```bash
 mkdir build
-cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
-cmake --build build
+cmake -S . -B build
+cmake --build build --config Release
 ```
 
 ## Usage
