@@ -74,13 +74,18 @@ bool Environment::Init()
 // Busy-wait for the given number of microseconds.
 static void BusyWaitMicros(LONGLONG micros)
 {
-    LARGE_INTEGER freq, start, now;
-
-    QueryPerformanceFrequency(&freq);
-    assert(freq.QuadPart > 0);
-    const LONGLONG freqUs = freq.QuadPart / 1'000'000;
+    static thread_local bool first = true;
+    static thread_local LONGLONG freqUs;
+    if (first)
+    {
+        LARGE_INTEGER freq;
+        QueryPerformanceFrequency(&freq);
+        assert(freq.QuadPart > 0);
+        freqUs = freq.QuadPart / 1'000'000;
+    }
 
     LONGLONG elapsed;
+    LARGE_INTEGER start, now;
     QueryPerformanceCounter(&start);
     do
     {
